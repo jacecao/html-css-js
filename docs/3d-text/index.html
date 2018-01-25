@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>3D-Text</title>
+	<link rel="stylesheet" href="./main.css">
+</head>
+<body>
+	<div class="stage">
+    	<span class="letter" data-letter="J">J</span>
+    	<span class="letter" data-letter="U">U</span>
+    	<span class="letter" data-letter="N">N</span>
+    	<span class="letter" data-letter="E">E</span>
+    </div>
+    <hr>
+    <blockquote>
+    	<h2>3D变化主要CSS设置</h2>
+    	<ul>
+    		<li>perspective 属性用于舞台</li>
+    		<li>perspective-origin 设置3D元素的基点位置，即类似设定观察3D的视角</li>
+    		<li>transform-style: preserve-3d; 用于容器</li>
+    		<li>transfrom-origin 元素变换的中心位置，即以该点为变幻中心点</li>
+    		<li>tranform 用于变换元素</li>
+    	</ul>
+
+    	<h2>transform 3D属性</h2>
+    	<ul>
+    		<li>translate3d | translateX/Y/Z 3D移动</li>
+    		<li>rotate3d | rotateX/Y/Z 3D旋转</li>
+    		<li>scale3d | scaleX/Y/Z 3D缩放</li>
+    	</ul>
+    	<p>backface-visibility: visible|hidden; 旋转元素背面是否可见</p>
+
+    	<h2>伪元素content填充</h2>
+    	<p>这里我们使用了attr()这个css方法，<code>p::before{content:attr(attr-name);}</code>,通过该方法，我们可以获取本尊的属性值。</p>
+    </blockquote>
+</body>
+</html>
