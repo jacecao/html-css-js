@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>BFC</title>
+	<style>
+		.title {background-color: black; color: #ddd;}
+		.test1 {
+			background-color: pink;
+			overflow: hidden; /* step 1 */
+		}
+		p {
+			background-color: green;
+			margin: 10px 0;
+		}
+		.new-bfc {
+			overflow: hidden;  /* step 2 */
+		}
+		.float-test {
+			background-color: blue;
+			overflow: hidden; /* steo 3 解决浮动导致父元素塌陷的问题 */
+		}
+		.float-test div { float: left; margin: 10px; background-color: red; padding: 20px;}
+
+		.float-text div {padding: 20px; margin: 20px; float: left; background-color: darkgoldenrod}
+		.fix p {overflow: hidden;}
+
+		.column {
+			width: 31.33%;
+			background-color: green;
+			float: left;
+			margin: 0 1%;
+			height: 40px;
+		}
+		.column:last-child {float: none; overflow: hidden;} /* step 4 */
+	</style>
+</head>
+<body>
+	<h1>BFC(Block Formatting Context)</h1>
+	<p class="title">Block Formatting Context，中文直译为块级格式上下文。BFC就是一种布局方式，在这种布局方式下，盒子们自所在的containing block顶部一个接一个垂直排列，水平方向上撑满整个宽度（除非内部盒子自己建立了新的BFC）。两个相邻的BFC之间的距离由margin决定。在同一个BFC内部，两个垂直方向相邻的块级元素的margin会发生“塌陷”。文档这里也间接指出了垂直相邻盒子margin合并的解决办法：就是给这两个盒子也创建BFC。</p>
+	<strong>通俗一点，可以把BFC理解为一个封闭的大箱子，箱子内部的元素无论如何翻江倒海，都不会影响到外部。</strong>
+	<hr>
+	<div class="test1">
+		<p>在父元素没有添加overflow:hidden样式时，就不会触发BFC，注释掉step1里的代码发现，上下margin值被重叠了，也就是不会显现出来</p>
+		<p>但会发现两个子元素的margin值却出现重叠了，上个元素的‘下’margin值会和紧挨着的下一个元素的‘上’margin值重叠，取两个值得最大值</p>
+		<div class="new-bfc">
+			<p>防止元素的margin值重叠</p>
+		</div>
+	</div>
+
+	<h3>BFC-解决浮动排版问题</h3>
+	<div class="float-test">
+		<div>float_1</div>
+		<div>float_2</div>
+	</div>
+
+	<div class="float-text">
+		<div>float</div>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, voluptatibus cum! Excepturi iure, minus neque, laborum, minima omnis distinctio rem cumque inventore laudantium porro modi nobis sapiente. Minus, eveniet, ducimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores atque, corporis vero dolores officia neque magni inventore delectus, nulla, assumenda unde dignissimos nemo laboriosam, provident! Consectetur nam harum ipsum quibusdam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, nulla expedita natus iste laudantium eaque culpa sit. Sint corrupti, ducimus sed quis sunt, amet illo esse quasi eius! Rem, natus.</p>
+	</div>
+	<div class="float-text fix">
+		<div>float</div>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, voluptatibus cum! Excepturi iure, minus neque, laborum, minima omnis distinctio rem cumque inventore laudantium porro modi nobis sapiente. Minus, eveniet, ducimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores atque, corporis vero dolores officia neque magni inventore delectus, nulla, assumenda unde dignissimos nemo laboriosam, provident! Consectetur nam harum ipsum quibusdam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, nulla expedita natus iste laudantium eaque culpa sit. Sint corrupti, ducimus sed quis sunt, amet illo esse quasi eius! Rem, natus.</p>
+	</div>
+
+	<div class="container">
+		<div class="column">column 1</div>
+		<div class="column">column 2</div>
+		<div class="column">column 3</div>
+	</div>
+</body>
+</html>
