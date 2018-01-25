@@ -1,68 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 	<meta charset="UTF-8">
 	<title>BFC</title>
-	<style>
-		.title {background-color: black; color: #ddd;}
-		.test1 {
-			background-color: pink;
-			overflow: hidden; /* step 1 */
-		}
-		p {
-			background-color: green;
-			margin: 10px 0;
-		}
-		.new-bfc {
-			overflow: hidden;  /* step 2 */
-		}
-		.float-test {
-			background-color: blue;
-			overflow: hidden; /* steo 3 解决浮动导致父元素塌陷的问题 */
-		}
-		.float-test div { float: left; margin: 10px; background-color: red; padding: 20px;}
-
-		.float-text div {padding: 20px; margin: 20px; float: left; background-color: darkgoldenrod}
-		.fix p {overflow: hidden;}
-
-		.column {
-			width: 31.33%;
-			background-color: green;
-			float: left;
-			margin: 0 1%;
-			height: 40px;
-		}
-		.column:last-child {float: none; overflow: hidden;} /* step 4 */
-	</style>
+	<link rel="stylesheet" href="./main.css">
 </head>
 <body>
-	<h1>BFC(Block Formatting Context)</h1>
-	<p class="title">Block Formatting Context，中文直译为块级格式上下文。BFC就是一种布局方式，在这种布局方式下，盒子们自所在的containing block顶部一个接一个垂直排列，水平方向上撑满整个宽度（除非内部盒子自己建立了新的BFC）。两个相邻的BFC之间的距离由margin决定。在同一个BFC内部，两个垂直方向相邻的块级元素的margin会发生“塌陷”。文档这里也间接指出了垂直相邻盒子margin合并的解决办法：就是给这两个盒子也创建BFC。</p>
-	<strong>通俗一点，可以把BFC理解为一个封闭的大箱子，箱子内部的元素无论如何翻江倒海，都不会影响到外部。</strong>
-	<hr>
-	<div class="test1">
-		<p>在父元素没有添加overflow:hidden样式时，就不会触发BFC，注释掉step1里的代码发现，上下margin值被重叠了，也就是不会显现出来</p>
-		<p>但会发现两个子元素的margin值却出现重叠了，上个元素的‘下’margin值会和紧挨着的下一个元素的‘上’margin值重叠，取两个值得最大值</p>
-		<div class="new-bfc">
-			<p>防止元素的margin值重叠</p>
-		</div>
-	</div>
 
-	<h3>BFC-解决浮动排版问题</h3>
-	<div class="float-test">
+	<h2>什么是BFC？</h2>
+	<p class="title">BFC是Block Formatting Context的简称，中文直译为块级格式上下文。个人认为这是CSS作用于HTML结构布局的一种渲染模式。两个相邻的BFC之间的距离由margin决定。在同一个BFC内部，两个垂直方向相邻的块级元素的margin会发生“塌陷”。</p>
+	<strong>通俗一点，可以把BFC理解为一个封闭的大箱子，箱子内部的元素无论如何翻江倒海，都不会影响到外部.</strong>
+	<hr>
+	
+	<h3>如何触发BFC模式</h3>
+	<p class="title">满足下列条件之一就会触发BFC模式</p>
+	<ul>
+		<li>float属性不为none</li>
+		<li>overflow不为visible(可以是hidden、scroll、auto)</li>
+		<li>position为absolute或fixed</li>
+		<li>display为inline-block、table-cell、table-caption</li>
+	</ul>
+	<hr>
+
+	<h3>通过触发BFC防止margin值重叠</h3>
+	<blockquote>
+		<p>下面这个例子中如果我们没有触发BFC</p>
+		<code>div p{margin: 10 0;}</code>
+	</blockquote>
+	<div class="test1">
+		<p>在父元素没有添加overflow:hidden样式时,上下margin值被重叠了，也就是不会显现出来</p>
+		<p>重叠原则：上个元素的‘下’margin值会和紧挨着的下一个元素的‘上’margin值重叠，取两个值得最大值</p>
+	</div>
+	<blockquote>
+		<p>通过overflow: hidden;触发BFC</p>
+		<code>div {overflow: hidden;}</code>
+	</blockquote>
+	<div class="test2">
+		<p>在父元素没有添加overflow:hidden样式时,上下margin值被重叠了，也就是不会显现出来</p>
+		<p>重叠原则：上个元素的‘下’margin值会和紧挨着的下一个元素的‘上’margin值重叠，取两个值得最大值</p>
+	</div>
+	<hr>
+
+	<h3>BFC-清除浮动</h3>
+	<blockquote>
+		<p>清除浮动一直是比较麻烦的事情，现在通过BFC可以轻松解决</p>
+		<p>依然通过overflow来解决</p>
+		<code>div {background: #ddd; overflow: hidden;}</code>
+	</blockquote>
+	<div class="float-test clearfloat">div
 		<div>float_1</div>
 		<div>float_2</div>
 	</div>
+	<hr>
 
+	<h3>清除因元素浮动产生的文字环绕</h3>
+	<blockquote>
+		<p>如下面这样的效果，如何解决文字环绕浮动元素呢？</p>
+		<code>p {background: #eee;}</code>
+	</blockquote>
 	<div class="float-text">
 		<div>float</div>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, voluptatibus cum! Excepturi iure, minus neque, laborum, minima omnis distinctio rem cumque inventore laudantium porro modi nobis sapiente. Minus, eveniet, ducimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores atque, corporis vero dolores officia neque magni inventore delectus, nulla, assumenda unde dignissimos nemo laboriosam, provident! Consectetur nam harum ipsum quibusdam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, nulla expedita natus iste laudantium eaque culpa sit. Sint corrupti, ducimus sed quis sunt, amet illo esse quasi eius! Rem, natus.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, voluptatibus cum! Excepturi iure, minus neque, laborum, minima omnis distinctio rem cumque inventore laudantium porro modi nobis sapiente. Minus, eveniet, ducimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.veniet, ducimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. </p>
 	</div>
+	<blockquote>
+		<p>出现这种情况的原因是，在BFC模式中, 所有的子元素左边缘都将紧靠容器的左边缘，即使内部的浮动元素也是如此。这里需要理解一点，如果一个容器里出现两个浮动元素，为什么没有重合一起都紧靠左边呢？1.没有重合的原因就是浮动依然属于正常文档流，文档流当然不会出现元素重合的现象，这就有别于绝对定位（脱离文档流）。2. 其中一个元素没有紧靠左边的原因是，在正常文档流里，如果当前宽度能够容纳子元素, 那么子元素依次紧靠左边缘排列，如果当前宽度不够，那就会在下一行中紧靠容器左边缘开始排列</p>
+		<p>如果要解决文字环绕，我们可以让P元素也浮动起来,但我们必须给p元素添加指定宽度，这样才能显现为2列效果，但这个样就会有很多后遗症。我们需要给容器清除浮动，而且p宽度又不确定</p>
+		<p>最好的解决办法，就是让p元素触发BFC模式，这样就不需要紧靠容器左边缘显示</p>
+		<code>p {overflow: hidden;}</code>
+	</blockquote>
 	<div class="float-text fix">
 		<div>float</div>
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, voluptatibus cum! Excepturi iure, minus neque, laborum, minima omnis distinctio rem cumque inventore laudantium porro modi nobis sapiente. Minus, eveniet, ducimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores atque, corporis vero dolores officia neque magni inventore delectus, nulla, assumenda unde dignissimos nemo laboriosam, provident! Consectetur nam harum ipsum quibusdam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, nulla expedita natus iste laudantium eaque culpa sit. Sint corrupti, ducimus sed quis sunt, amet illo esse quasi eius! Rem, natus.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, voluptatibus cum! Excepturi iure, minus neque, laborum, minima omnis distinctio rem cumque inventore laudantium porro modi nobis sapiente. Minus, eveniet, ducimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.veniet, ducimus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 	</div>
+	<hr>
 
+	<h3>BFC实现自适应灵活多列布局</h3>
+	<blockquote>
+		<p>通过浮动来实现多列布局，有时会出现因为宽度不够，导致最后一列被布局到下一行中显示，那如何避免这个情况呢？BFC模式中，如果当前为列布局，如上面那个例子，那么新的BFC，它将在前一列填充完毕后，将占据剩余的空间,这是一个非常有意思的地方，我们可以拖拉浏览器宽度，看上面文字显示的结果</p>
+		<p>这里就是运用这里原理实现，类自适应列布局，当然这个方法并不可取，因为它的实现，依然需要在指定的宽度设置下</p>
+		<code>.column{float: left;} .column-lastChild{float: none; overflow: hidden;}</code>
+	</blockquote>
 	<div class="container">
 		<div class="column">column 1</div>
 		<div class="column">column 2</div>
