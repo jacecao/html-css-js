@@ -7,6 +7,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 	<style>
 		header{ text-align: center; padding-left: 4rem;}
+		pre {height: 55vh; overflow-y: auto;}
+		footer {padding: 1rem 0 0 2rem; color: #047f6d; }
 	</style>
 </head>
 <body>
@@ -21,42 +23,163 @@
 	</header>
 	
 	<section class="hero is-primary">
-	  <div class="hero-body">
-	    <div class="container">
-	      <h1 class="title" id="text1">
-	        This is index
-	      </h1>
-	      <h2 class="subtitle" id="text2">
-	        home page
-	      </h2>
-	    </div>
-	  </div>
-	  
-	  <pre>
+		<div class="hero-body">
+			<div class="container">
+			  <h1 class="title" id="text1">
+			    This is index
+			  </h1>
+			  <h2 class="subtitle" id="text2">
+			    home page
+			  </h2>
+			</div>
+		</div>
+	
+		<pre>
+		/*实现代码*/
+	  	// 开发环境识别
+	  	var resolve = function (pathname) {
+	  		let path = {
+	  			firstPath: '',
+	  			lastPath: ''
+	  		};
+	  		// 如果当前访问路径包含文件夹名称，那么非测试环境
+	  		if (pathname.indexOf('history-api') !== -1) {
+	  			let _arr = pathname.split('-api');
+	  			path.firstPath = _arr[0] + '-api';
+	  			path.lastPath = _arr[1];
+	  		} else {
+	  			path.lastPath = pathname;
+	  		}
+	  		return path;
+	  	}
+	  	// 路由实现核心功能
+	  	var router = function (reqURL) {
+	  		
+	  		let resolvePath = resolve(window.location.pathname);
+	  		let pathName = resolvePath.lastPath;
+	  		let firstPath = resolvePath.firstPath;
+
+	  		if (reqURL) {
+	  			pathName = reqURL.slice(1);
+	  		} else {
+	  			pathName = resolvePath.lastPath.slice(1);
+	  			// 改变按钮状态
+	  			let links = document.querySelectorAll('li');
+	  			Array.prototype.forEach.call(links, function (link) {
+	  				link.classList.remove('is-active');
+	  				let _pathname = resolvePath.lastPath == '/' ? '/index' : resolvePath.lastPath;
+	  				let _a = link.firstElementChild;
+	  				if (_a.getAttribute('href') == _pathname) {
+	  					link.classList.add('is-active');
+	  				}
+	  			});
+	  		}
+
+	  		let title = new String();
+
+	  		// 改变内容
+	  		let text1 = document.querySelector('#text1');
+	  		let text2 = document.querySelector('#text2');
+
+	  		switch (pathName) {
+	  			case '':
+	  			case 'index':
+	  				title = '前端路由控制-首页';
+	  				text1.innerHTML = '这是首页';
+	  				text2.innerHTML = 'this is index page';
+	  				break;
+	  			case 'news':
+	  				title = '前端路由控制-新闻';
+	  				text1.innerHTML = '这是新闻页';
+	  				text2.innerHTML = 'this is news page';
+	  				break;
+	  			case 'about':
+	  				title = '前端路由控制-关于';
+	  				text1.innerHTML = '这是关于页';
+	  				text2.innerHTML = 'this is about page';
+	  				break;		
+	  		}
+	  		document.title = title;
+
+	  		history.pushState({title: title}, title, firstPath + '/' + pathName);
+	  	}
+
+	  	let navbar = document.querySelector('#navbar');
 	  	
-	  </pre>
+	  	navbar.addEventListener('click', function (e) {
+	  		e.preventDefault();
+	  		if (e.target.nodeName.toLowerCase() == 'a') {
+	  			// 改变按钮状态
+	  			let links = document.querySelectorAll('li');
+	  			Array.prototype.forEach.call(links, function (link) {
+	  				link.classList.remove('is-active');
+	  			});
+	  			e.target.parentNode.classList.add('is-active');
+
+	  			router(e.target.getAttribute('href'));
+	  			// console.log(e.target.getAttribute('href'));
+	  			// console.log(e.target.href);
+	  		}
+	  	}, false);
+
+	  	router();
+
+	  	// 这里是指当网页前进和后退时触发地址和页面数据更新
+	  	window.addEventListener("popstate", function(e){
+	  		// console.log(e);
+	  		router();
+	  	}, false);
+	  	</pre>
 	</section>
 
+	<footer>
+		<ol>
+			<li>由于使用了一点ES6语法，所以请使用最新版本浏览器</li>
+			<li>使用server.js来启动服务，浏览效果最佳</li>
+			<li>其他服务器环境，需要配置访问路径，否则收到刷新页面就会404错误</li>
+		</ol>	
+	</footer>
+	
 	<script>
-
-		// locationURI
-		var getContent = function (query) {
-			let pathName = '';
-			if (query) {
-				pathName = query.slice(1);
+		// 开发环境识别
+		var resolve = function (pathname) {
+			let path = {
+				firstPath: '',
+				lastPath: ''
+			};
+			// 如果当前访问路径包含文件夹名称，那么非测试环境
+			if (pathname.indexOf('history-api') !== -1) {
+				let _arr = pathname.split('-api');
+				path.firstPath = _arr[0] + '-api';
+				path.lastPath = _arr[1];
 			} else {
-				pathName = (window.location.pathname).slice(1);
+				path.lastPath = pathname;
+			}
+			return path;
+		}
+		// locationURI
+		var router = function (reqURL) {
+			
+			let resolvePath = resolve(window.location.pathname);
+			let pathName = resolvePath.lastPath;
+			let firstPath = resolvePath.firstPath;
+
+			if (reqURL) {
+				pathName = reqURL.slice(1);
+			} else {
+				pathName = resolvePath.lastPath.slice(1);
 				// 改变按钮状态
 				let links = document.querySelectorAll('li');
 				Array.prototype.forEach.call(links, function (link) {
 					link.classList.remove('is-active');
-					let _pathname = window.location.pathname == '/' ? '/index' : window.location.pathname;
+					let _pathname = resolvePath.lastPath == '/' ? '/index' : resolvePath.lastPath;
 					let _a = link.firstElementChild;
 					if (_a.getAttribute('href') == _pathname) {
 						link.classList.add('is-active');
 					}
 				});
 			}
+
 			let title = new String();
 
 			// 改变内容
@@ -83,7 +206,7 @@
 			}
 			document.title = title;
 
-			history.pushState({title: title}, title, '/' + pathName);
+			history.pushState({title: title}, title, firstPath + '/' + pathName);
 		}
 
 		let navbar = document.querySelector('#navbar');
@@ -98,18 +221,18 @@
 				});
 				e.target.parentNode.classList.add('is-active');
 
-				getContent(e.target.getAttribute('href'));
+				router(e.target.getAttribute('href'));
 				// console.log(e.target.getAttribute('href'));
 				// console.log(e.target.href);
 			}
 		}, false);
 
-		getContent();
+		router();
 
 		// 这里是指当网页前进和后退时触发地址和页面数据更新
 		window.addEventListener("popstate", function(e){
-			console.log(e);
-			getContent();
+			// console.log(e);
+			router();
 		}, false);
 	</script>
 </body>
