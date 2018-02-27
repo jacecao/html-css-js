@@ -1,6 +1,6 @@
 ## CSS3和HTML5趣码
 
-[预览地址](https://jacecao.github.io/html_css/)
+[预览地址](https://jacecao.github.io/html-css-js/)
 
 * #### CSS中的BFC 
 
