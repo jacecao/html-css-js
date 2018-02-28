@@ -3,27 +3,32 @@
 <head>
 	<meta charset="UTF-8">
 	<title>HTML_CSS</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 	<style>
 		html {font-size: 62.5%;}
 		border {width: 80%; min-width: 40rem;}
-		h1{font-size: 2.4rem; text-align: center; background: #40eee5; padding: 1rem;}
+		h1{font-size: 2.4rem; text-align: center; padding: 1rem;}
 		ul {
 			width: 80%;
+			margin: 5rem auto;
 		}
-		ul>li {
-			height: 1.4rem;
-			line-height: 1.4rem;
-			padding: 1rem;
+		ul {
 			font-size: 1.8rem;
+			text-align: center;
 		}
 	</style>
 </head>
 <body>
-	<h1>List</h1>
-	<ul>
-		<li><a href="./bfc/" title="BFC测试">BFC</a></li>
-		<li><a href="./3d-text/" title="3D文字显示">简洁的3D文字显示效果</a></li>
-		<li><a href="./history-api/" title="单页应用路由控制">historyAPI实现SPA页面路由</a></li>
-	</ul>
+	<header class="hero is-primary">
+		<h1>Demo-List</h1>
+	</header>
+	<nav>
+		<ul>
+			<li><a href="./bfc/" title="BFC测试">BFC</a></li>
+			<li><a href="./3d-text/" title="3D文字显示">简洁的3D文字显示效果</a></li>
+			<li><a href="./history-api/" title="单页应用路由控制">historyAPI实现SPA页面路由</a></li>
+		</ul>
+	</nav>
+	
 </body>
 </html>
