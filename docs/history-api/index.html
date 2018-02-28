@@ -31,155 +31,63 @@
 			  <h2 class="subtitle" id="text2">
 			    home page
 			  </h2>
+			  <p>
+			  	路由实现的核心思想就是不断的监听URL,一旦URL发生变化就交给router函数处理
+			  </p>
+			  <ol>
+			  	router函数执行步骤：
+				<li>分析URL获取资源定位</li>
+				<li>根据资源定位加载对应的资源（这里的demo就是更改页面内容）</li>
+				<li>将当前定位加入浏览记录栈内，这里只有加入栈内后，才能页面前进后退中获取我们已设置好的资源</li>
+			  </ol>
+			  <dl>
+			  	<dt>关于pushState()</dt>
+			  	<dd>pushState()这个方法做了两件事，1.添加浏览历史记录，2.改变当前URL；我看很多文章提到使用该函数就会触发popstate事件，这个其实是不正确，只有通过pushState将数据加入记录栈后，Windows才会生成popstate事件，<em>注意</em>这里仅仅是生成了这个事件，而不会触发这个事件，只有前进后退才会触发popstate事件</dd>
+			  </dl>
 			</div>
 		</div>
 	
 		<pre>
 		/*实现代码*/
-	  	// 开发环境识别
-	  	var resolve = function (pathname) {
-	  		let path = {
-	  			firstPath: '',
-	  			lastPath: ''
-	  		};
-	  		// 如果当前访问路径包含文件夹名称，那么非测试环境
-	  		if (pathname.indexOf('history-api') !== -1) {
-	  			let _arr = pathname.split('-api');
-	  			path.firstPath = _arr[0] + '-api';
-	  			path.lastPath = _arr[1];
-	  		} else {
-	  			path.lastPath = pathname;
-	  		}
-	  		return path;
-	  	}
-	  	// 路由实现核心功能
-	  	var router = function (reqURL) {
-	  		
-	  		let resolvePath = resolve(window.location.pathname);
-	  		let pathName = resolvePath.lastPath;
-	  		let firstPath = resolvePath.firstPath;
-
-	  		if (reqURL) {
-	  			pathName = reqURL.slice(1);
-	  		} else {
-	  			pathName = resolvePath.lastPath.slice(1);
-	  			// 改变按钮状态
-	  			let links = document.querySelectorAll('.link');
-	  			Array.prototype.forEach.call(links, function (link) {
-	  				link.classList.remove('is-active');
-	  				let _pathname = resolvePath.lastPath == '/' ? '/index' : resolvePath.lastPath;
-	  				let _a = link.firstElementChild;
-	  				if (_a.getAttribute('href') == _pathname) {
-	  					link.classList.add('is-active');
-	  				}
-	  			});
-	  		}
-
-	  		let title = new String();
-
-	  		// 改变内容
-	  		let text1 = document.querySelector('#text1');
-	  		let text2 = document.querySelector('#text2');
-
-	  		switch (pathName) {
-	  			case '':
-	  			case 'index':
-	  				title = '前端路由控制-首页';
-	  				text1.innerHTML = '这是首页';
-	  				text2.innerHTML = 'this is index page';
-	  				break;
-	  			case 'news':
-	  				title = '前端路由控制-新闻';
-	  				text1.innerHTML = '这是新闻页';
-	  				text2.innerHTML = 'this is news page';
-	  				break;
-	  			case 'about':
-	  				title = '前端路由控制-关于';
-	  				text1.innerHTML = '这是关于页';
-	  				text2.innerHTML = 'this is about page';
-	  				break;		
-	  		}
-	  		document.title = title;
-
-	  		history.pushState({title: title}, title, firstPath + '/' + pathName);
-	  	}
-
-	  	let navbar = document.querySelector('#navbar');
-	  	
-	  	navbar.addEventListener('click', function (e) {
-	  		e.preventDefault();
-	  		if (e.target.nodeName.toLowerCase() == 'a') {
-	  			// 改变按钮状态
-	  			let links = document.querySelectorAll('li');
-	  			Array.prototype.forEach.call(links, function (link) {
-	  				link.classList.remove('is-active');
-	  			});
-	  			e.target.parentNode.classList.add('is-active');
-
-	  			router(e.target.getAttribute('href'));
-	  			// console.log(e.target.getAttribute('href'));
-	  			// console.log(e.target.href);
-	  		}
-	  	}, false);
-
-	  	router();
-
-	  	// 这里是指当网页前进和后退时触发地址和页面数据更新
-	  	window.addEventListener("popstate", function(e){
-	  		// console.log(e);
-	  		router();
-	  	}, false);
-	  	</pre>
-	</section>
-
-	<footer>
-		<ol>
-			<li>由于使用了一点ES6语法，所以请使用最新版本浏览器</li>
-			<li>使用server.js来启动服务，浏览效果最佳</li>
-			<li>其他服务器环境，需要配置访问路径，否则收到刷新页面就会404错误</li>
-		</ol>	
-	</footer>
-	
-	<script>
-		// 开发环境识别
-		var resolve = function (pathname) {
+	  	// 针对不同路径解析URL
+		var resolve = function () {
 			let path = {
 				firstPath: '',
 				lastPath: ''
 			};
 			// 如果当前访问路径包含文件夹名称，那么非测试环境
-			if (pathname.indexOf('history-api') !== -1) {
-				let _arr = pathname.split('-api');
+			if (window.location.pathname.indexOf('history-api') !== -1) {
+				let _arr = window.location.pathname.split('-api');
 				path.firstPath = _arr[0] + '-api';
 				path.lastPath = _arr[1];
 			} else {
-				path.lastPath = pathname;
+				path.lastPath = window.location.pathname;
 			}
+
 			return path;
 		}
-		// locationURI
+		// 路由实现核心功能
 		var router = function (reqURL) {
 			
-			let resolvePath = resolve(window.location.pathname);
-
-			let pathName = resolvePath.lastPath;
+			let resolvePath = resolve();
+			
 			let firstPath = resolvePath.firstPath;
+			let pathName = resolvePath.lastPath;
 
 			if (reqURL) {
-				pathName = reqURL.slice(1);
-			} else {
-				pathName = resolvePath.lastPath.slice(1);
-				// 改变按钮状态
-				let links = document.querySelectorAll('.link');
-				Array.prototype.forEach.call(links, function (link) {
-					link.classList.remove('is-active');
-					let _pathname = resolvePath.lastPath == '/' ? '/index' : resolvePath.lastPath;
-					let _a = link.firstElementChild;
-					if (_a.getAttribute('href') == _pathname) {
-						link.classList.add('is-active');
-					}
-				});
+				pathName = reqURL;
 			}
+
+			// 改变按钮状态
+			let links = document.querySelectorAll('.link');
+			let _pathname = pathName == '/' ? '/index' : pathName;
+			Array.prototype.forEach.call(links, function (link) {
+				link.classList.remove('is-active');
+				let _a = link.firstElementChild;
+				if (_a.getAttribute('href') == _pathname) {
+					link.classList.add('is-active');
+				}
+			});
 
 			let title = new String();
 
@@ -188,18 +96,18 @@
 			let text2 = document.querySelector('#text2');
 
 			switch (pathName) {
-				case '':
-				case 'index':
+				case '/':
+				case '/index':
 					title = '前端路由控制-首页';
 					text1.innerHTML = '这是首页';
 					text2.innerHTML = 'this is index page';
 					break;
-				case 'news':
+				case '/news':
 					title = '前端路由控制-新闻';
 					text1.innerHTML = '这是新闻页';
 					text2.innerHTML = 'this is news page';
 					break;
-				case 'about':
+				case '/about':
 					title = '前端路由控制-关于';
 					text1.innerHTML = '这是关于页';
 					text2.innerHTML = 'this is about page';
@@ -207,7 +115,7 @@
 			}
 			document.title = title;
 
-			history.pushState({title: title}, title, firstPath + '/' + pathName);
+			history.pushState({title: title}, title, firstPath + pathName);
 		}
 
 		let navbar = document.querySelector('#navbar');
@@ -215,13 +123,105 @@
 		navbar.addEventListener('click', function (e) {
 			e.preventDefault();
 			if (e.target.nodeName.toLowerCase() == 'a') {
-				// 改变按钮状态
-				let links = document.querySelectorAll('li');
-				Array.prototype.forEach.call(links, function (link) {
-					link.classList.remove('is-active');
-				});
-				e.target.parentNode.classList.add('is-active');
+				router(e.target.getAttribute('href'));
+				// console.log(e.target.getAttribute('href'));
+				// console.log(e.target.href);
+			}
+		}, false);
 
+		router();
+
+		// 这里是指当网页前进和后退时触发地址和页面数据更新onpopstate
+		window.addEventListener("popstate", function(e){
+			console.log(e.state);
+			router();
+		}, false);
+	  	</pre>
+	</section>
+
+	<footer>
+		<ol>
+			<li>由于使用了一点ES6语法，所以请使用最新版本浏览器</li>
+			<li>使用node来启动server.js服务，浏览效果最佳</li>
+			<li>其他服务器环境，需要配置访问路径，否则刷新页面就会404错误</li>
+		</ol>	
+	</footer>
+	
+	<script>
+		// 针对不同路径解析URL
+		var resolve = function () {
+			let path = {
+				firstPath: '',
+				lastPath: ''
+			};
+			// 如果当前访问路径包含文件夹名称，那么非测试环境
+			if (window.location.pathname.indexOf('history-api') !== -1) {
+				let _arr = window.location.pathname.split('-api');
+				path.firstPath = _arr[0] + '-api';
+				path.lastPath = _arr[1];
+			} else {
+				path.lastPath = window.location.pathname;
+			}
+
+			return path;
+		}
+		// 路由实现核心功能
+		var router = function (reqURL) {
+			
+			let resolvePath = resolve();
+			
+			let firstPath = resolvePath.firstPath;
+			let pathName = resolvePath.lastPath;
+
+			if (reqURL) {
+				pathName = reqURL;
+			}
+
+			// 改变按钮状态
+			let links = document.querySelectorAll('.link');
+			let _pathname = pathName == '/' ? '/index' : pathName;
+			Array.prototype.forEach.call(links, function (link) {
+				link.classList.remove('is-active');
+				let _a = link.firstElementChild;
+				if (_a.getAttribute('href') == _pathname) {
+					link.classList.add('is-active');
+				}
+			});
+
+			let title = new String();
+
+			// 改变内容
+			let text1 = document.querySelector('#text1');
+			let text2 = document.querySelector('#text2');
+
+			switch (pathName) {
+				case '/':
+				case '/index':
+					title = '前端路由控制-首页';
+					text1.innerHTML = '这是首页';
+					text2.innerHTML = 'this is index page';
+					break;
+				case '/news':
+					title = '前端路由控制-新闻';
+					text1.innerHTML = '这是新闻页';
+					text2.innerHTML = 'this is news page';
+					break;
+				case '/about':
+					title = '前端路由控制-关于';
+					text1.innerHTML = '这是关于页';
+					text2.innerHTML = 'this is about page';
+					break;		
+			}
+			document.title = title;
+
+			history.pushState({title: title}, title, firstPath + pathName);
+		}
+
+		let navbar = document.querySelector('#navbar');
+		
+		navbar.addEventListener('click', function (e) {
+			e.preventDefault();
+			if (e.target.nodeName.toLowerCase() == 'a') {
 				router(e.target.getAttribute('href'));
 				// console.log(e.target.getAttribute('href'));
 				// console.log(e.target.href);

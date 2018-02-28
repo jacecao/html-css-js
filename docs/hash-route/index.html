@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>前端路由控制-首页</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<style>
+		header{ text-align: center; padding-left: 4rem;}
+		pre {height: 55vh; overflow-y: auto;}
+		footer {padding: 1rem 0 0 2rem; color: #047f6d; }
+	</style>
+</head>
+<body>
+	<header>
+		<nav class="breadcrumb" aria-label="breadcrumbs">
+			<ul id="navbar">
+				<li class="link is-active"><a href="/index">首页</a></li>
+				<li class="link"><a href="/news">新闻</a></li>
+				<li class="link"><a href="/about">关于</a></li>
+			</ul>
+		</nav>
+	</header>
+	
+	<section class="hero is-primary">
+		<div class="hero-body">
+			<div class="container">
+			  <h1 class="title" id="text1">
+			    This is index
+			  </h1>
+			  <h2 class="subtitle" id="text2">
+			    home page
+			  </h2>
+			</div>
+			<p>通过hash来实现路由，本质和pushState()一样，只是路径命名有了限制，必须对有意义的字段前添加'#'符号，当然有了这个限制后方便对URL字符串解析</p>
+		</div>
+	
+		<pre>
+			// 路由的实现
+			var router = function (reqURL) {
+				
+				let resolvePath = (window.location.href).split('#');
+
+				let pathName = resolvePath[1] ? resolvePath[1]: '/index';
+				let firstPath = resolvePath[0];
+
+				if (reqURL) {
+					pathName = reqURL;
+				} else {
+					// 改变按钮状态
+					let links = document.querySelectorAll('.link');
+					Array.prototype.forEach.call(links, function (link) {
+						link.classList.remove('is-active');
+						let _a = link.firstElementChild;
+						if (_a.getAttribute('href') == pathName) {
+							link.classList.add('is-active');
+						}
+					});
+				}
+
+				let title = new String();
+
+				// 改变内容
+				let text1 = document.querySelector('#text1');
+				let text2 = document.querySelector('#text2');
+
+				switch (pathName) {
+					........(与上一个列子一样)
+				}
+				document.title = title;
+				
+				window.location.href = firstPath + '#' + pathName;
+
+			}
+
+			let navbar = document.querySelector('#navbar');
+			
+			navbar.addEventListener('click', function (e) {
+				e.preventDefault();
+				if (e.target.nodeName.toLowerCase() == 'a') {
+					router(e.target.getAttribute('href'));
+				}
+			}, false);
+
+			router();
+
+			window.addEventListener("hashchange", function () {
+				router();
+	  	</pre>
+	</section>
+
+	<footer>
+		<ol>
+			<li>由于使用了一点ES6语法，所以请使用最新版本浏览器</li>
+			<li>使用server.js来启动服务，浏览效果最佳</li>
+			<li>其他服务器环境，需要配置访问路径，否则收到刷新页面就会404错误</li>
+		</ol>	
+	</footer>
+	
+	<script>
+		// 路由的实现
+		var router = function (reqURL) {
+			
+			let resolvePath = (window.location.href).split('#');
+
+			let pathName = resolvePath[1] ? resolvePath[1]: '/index';
+			let firstPath = resolvePath[0];
+
+			if (reqURL) {
+				pathName = reqURL;
+			} else {
+				// 改变按钮状态
+				let links = document.querySelectorAll('.link');
+				Array.prototype.forEach.call(links, function (link) {
+					link.classList.remove('is-active');
+					let _a = link.firstElementChild;
+					if (_a.getAttribute('href') == pathName) {
+						link.classList.add('is-active');
+					}
+				});
+			}
+
+			let title = new String();
+
+			// 改变内容
+			let text1 = document.querySelector('#text1');
+			let text2 = document.querySelector('#text2');
+
+			switch (pathName) {
+				case '':
+				case '/index':
+					title = '前端路由控制-首页';
+					text1.innerHTML = '这是首页';
+					text2.innerHTML = 'this is index page';
+					break;
+				case '/news':
+					title = '前端路由控制-新闻';
+					text1.innerHTML = '这是新闻页';
+					text2.innerHTML = 'this is news page';
+					break;
+				case '/about':
+					title = '前端路由控制-关于';
+					text1.innerHTML = '这是关于页';
+					text2.innerHTML = 'this is about page';
+					break;		
+			}
+			document.title = title;
+			
+			window.location.href = firstPath + '#' + pathName;
+
+		}
+
+		let navbar = document.querySelector('#navbar');
+		
+		navbar.addEventListener('click', function (e) {
+			e.preventDefault();
+			if (e.target.nodeName.toLowerCase() == 'a') {
+				router(e.target.getAttribute('href'));
+			}
+		}, false);
+
+		router();
+
+		window.addEventListener("hashchange", function () {
+			router();
+		}, false);
+	</script>
+</body>
+</html>
