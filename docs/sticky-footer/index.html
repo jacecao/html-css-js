@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>前端路由控制-首页</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<style>
+		html {
+			height: 100%;
+		}
+
+		header { 
+			text-align: center;
+		}
+		section {
+			padding: 1rem 4rem;
+		}
+		footer {
+			border-top: 1px solid #ccc;
+			color: #047f6d;
+			background: #eee;
+			text-align: center;
+			line-height: 3rem; 
+		}
+		pre {height: 55vh; overflow-y: auto;}
+		
+		.clearfix {display: inline-block;}
+		.clearfix::after {
+			content: '.';
+			display: block;
+			height: 0;
+			visibility: hidden;
+			clear: both;
+		}
+
+		/*test-1*/
+		.test-1 {
+			display: table;
+			height: 100%;
+			width: 100%;
+		}
+			.test-1.row {
+				display: table-row;
+				height: 1px;
+			}
+
+			.test-1.row .expand {
+				height: auto;
+			}
+
+
+		.test-2 {
+			display: flex;
+			/*flex-direction: column;*/
+			flex-flow: column;
+			min-height: 100vh;
+		}
+			.test-2 .middle {
+				flex: 1;
+			}
+		
+		.test-3 , .wrapper{
+			height: 100%;
+			width: 100%;
+		}
+			.test-3 .wrapper {
+				height: auto;
+				min-height: 100%;
+			}
+			.test-3 .main-content {
+				padding-bottom: 50px;
+			}
+			.test-3 .bottom {
+				position: relative;
+				height: 50px;
+				margin-top: -50px;
+				clear: both;
+			}
+	</style>
+</head>
+<body class="test-3">
+	  
+	<!-- test-1 test-2 -->
+	<!--
+	<header class="hero is-primary top row">
+		<h1 class="title is-2">Sticky-footer</h1>
+		<a href="https://jacecao.github.io/html-css-js/">返回项目首页</a>
+	</header>
+	<section class="middle row expand clearfix">
+		<div class="content">
+			this is content
+		</div>
+	</section>
+	-->
+
+	<div class="wrapper clearfix">
+		<div class="main-content">
+			<header class="hero is-primary top row">
+				<h1 class="title is-2">Sticky-footer</h1>
+				<a href="https://jacecao.github.io/html-css-js/">返回项目首页</a>
+			</header>
+			<section class="middle row expand">
+				<div class="content">
+					this is content
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
+				</div>
+			</section>
+		</div>	
+	</div>
+
+	
+	<footer class="bottom row">
+		<span>&copy;-hiou</span>	
+	</footer>
+	
+	
+	
+	<script>
+	</script>
+</body>
+</html>
