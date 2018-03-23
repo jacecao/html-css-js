@@ -3,126 +3,201 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>前端路由控制-首页</title>
+	<title>stick-footer</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
 	<style>
 		html {
 			height: 100%;
 		}
-
-		header { 
+		header {
+			height: 12rem;
+			background-color: #84fab0;
+			background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
 			text-align: center;
+			color: #fff;
 		}
-		section {
-			padding: 1rem 4rem;
-		}
-		footer {
-			border-top: 1px solid #ccc;
-			color: #047f6d;
-			background: #eee;
-			text-align: center;
-			line-height: 3rem; 
-		}
-		pre {height: 55vh; overflow-y: auto;}
+		header .title {padding-top:3rem; color:#fff;}
+		header p{font-size: 1.8rem;}
+		pre {height: 400px; overflow-y: auto;}
 		
-		.clearfix {display: inline-block;}
-		.clearfix::after {
-			content: '.';
+		i.i-text {
 			display: block;
-			height: 0;
-			visibility: hidden;
+			color: #ccc; 
+			font-size: 1rem; 
+			width:80%; 
+			text-align: left;
+			margin: 0 auto;
+		}
+		.hr {
+			text-align: center; 
+			padding: 1.2rem 0; 
+			color:#ccc;
+			width: 80%;
+			border-bottom: 1px solid #eee;
+			margin: 0 auto;
+		}
+		.item {
+			width: 80%;
+			margin: 20px auto 0;
+			overflow: hidden;
+		}
+		
+		.item .box {
+			width: 300px;
+			height: 400px;
+			float: left;
+			border: 1px solid #eee;
+			overflow: hidden;
+			overflow-y: scroll;
+			padding: 0;
+		}
+
+		.wrapper {
+			height: auto;
+			min-height: 100%;
+		}
+		.content {
+			padding-bottom: 30px;
+		}
+		.content .expand {
+			margin-top: 20px;
+		}
+		.content .text {
+			padding-bottom: 20px;
+		}
+		.demo-1 footer {
+			position: relative;
+			width: 100%;
+			height: 30px;
+			margin-top: -30px;
+			background-color: #ddd;
+			text-align: center;
 			clear: both;
 		}
-
-		/*test-1*/
-		.test-1 {
-			display: table;
-			height: 100%;
-			width: 100%;
-		}
-			.test-1.row {
-				display: table-row;
-				height: 1px;
-			}
-
-			.test-1.row .expand {
-				height: auto;
-			}
-
-
-		.test-2 {
-			display: flex;
-			/*flex-direction: column;*/
-			flex-flow: column;
-			min-height: 100vh;
-		}
-			.test-2 .middle {
-				flex: 1;
-			}
 		
-		.test-3 , .wrapper{
-			height: 100%;
+		.demo-2 .box {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			min-height: 100%;
+		}
+		.demo-2 .header {
 			width: 100%;
 		}
-			.test-3 .wrapper {
-				height: auto;
-				min-height: 100%;
-			}
-			.test-3 .main-content {
-				padding-bottom: 50px;
-			}
-			.test-3 .bottom {
-				position: relative;
-				height: 50px;
-				margin-top: -50px;
-				clear: both;
-			}
+		.demo-2 .middle {
+			width: 100%;
+			flex: 1;
+			margin: 20px 0;
+		}
+		.demo-2 footer {
+			width: 100%;
+			height: 30px;
+			background-color: #ddd;
+			text-align: center;
+		}
 	</style>
 </head>
-<body class="test-3">
-	  
-	<!-- test-1 test-2 -->
-	<!--
-	<header class="hero is-primary top row">
-		<h1 class="title is-2">Sticky-footer</h1>
-		<a href="https://jacecao.github.io/html-css-js/">返回项目首页</a>
+<body>
+	<header>
+		<h1 class="title is-1">HTML + CSS + JS</h1>
+		<p class="sub">stick-footer</p>
 	</header>
-	<section class="middle row expand clearfix">
-		<div class="content">
-			this is content
-		</div>
-	</section>
-	-->
 
-	<div class="wrapper clearfix">
-		<div class="main-content">
-			<header class="hero is-primary top row">
-				<h1 class="title is-2">Sticky-footer</h1>
-				<a href="https://jacecao.github.io/html-css-js/">返回项目首页</a>
-			</header>
-			<section class="middle row expand">
+	<p class="hr"><i>demo-1</i></p>
+
+	<div class="item demo-1">
+		<div class="box">
+			<div class="wrapper">
 				<div class="content">
-					this is content
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere doloribus laboriosam, recusandae ducimus cupiditate voluptates possimus non eligendi earum explicabo blanditiis, dolorem error nobis aperiam libero, quibusdam delectus aspernatur modi!
-				</div>
-			</section>
-		</div>	
-	</div>
+					<div class="hero is-primary">
+						<h1 class="title is-2">header</h1>
+					</div>
+					<section class="middle row expand">
+						<p class="text" contenteditable="true">尝试输入更多的内容....</p>
+					</section>
+				</div>	
+			</div>
+			<footer class="bottom">&copy;Hiou</footer>
+		</div>
+		<pre class="demo-1-pre">
+&lt;div class="box"&gt;
+  &lt;div class="wrapper"&gt;
+   &lt;div class="content"&gt;
+    &lt;div class="hero is-primary top row"&gt;
+    &lt;h1 class="title is-2"&gt;header&lt;/h1&gt;
+   &lt;/div&gt;
+   &lt;section class="middle row expand"&gt;
+    &lt;p contenteditable="true" class="text"&gt;尝试输入更多的内容....&lt;/p&gt;
+   &lt;/section&gt;
+  &lt;/div&gt;
+ &lt;/div&gt;
 
+ &lt;footer class="bottom"&gt;&copy;-hiou&lt;/footer&gt;
+&lt;/div&gt;
+.box {
+ width: 300px;
+ height: 400px;
+ float: left;
+ border: 1px solid #eee;
+ overflow: hidden;
+ overflow-y: scroll;
+ padding: 0;
+}
+.wrapper {
+ height: auto;
+ min-height: 100%;
+}
+.content {
+ padding-bottom: 30px;
+}
+.content .expand {
+ margin-top: 20px;
+}
+.content .text {
+ padding-bottom: 20px;
+}
+.item footer {
+ position: relative;
+ width: 100%;
+ height: 30px;
+ margin-top: -30px;
+ background-color: #ddd;
+ text-align: center;
+ clear: both;
+}</pre>
+	</div>
+	<i class="i-text">由于使用了HTML5可编辑属性，所以在低版本中无法完成内容输入</i>
+
+		<p class="hr"><i>demo-2</i></p>
+
+		<div class="item demo-2">
+			<div class="box">
+				<div class="hero is-primary header">
+					<h1 class="title is-2">header</h1>
+				</div>
+				<section class="middle row expand">
+					<p class="text" contenteditable="true">尝试输入更多的内容....</p>
+				</section>
+				<footer class="bottom">&copy;Hiou</footer>
+			</div>
+			<pre class="demo-2-pre">
+	&lt;div class="box"&gt;
+	  &lt;div class="wrapper"&gt;
+	   &lt;div class="content"&gt;
+	    &lt;div class="hero is-primary top row"&gt;
+	    &lt;h1 class="title is-2"&gt;header&lt;/h1&gt;
+	   &lt;/div&gt;
+	   &lt;section class="middle row expand"&gt;
+	    &lt;p&gt;contenteditable="true" class="text"&gt;尝试输入更多的内容....&lt;/p&gt;
+	   &lt;/section&gt;
+	  &lt;/div&gt;
+	 &lt;/div&gt;
+
+	 &lt;footer class="bottom"&gt;&copy;-hiou&lt;/footer&gt;
+	&lt;/div&gt;</pre>
+		</div>
+		<i class="i-text">通过flex布局就非常容易实现，所以非常适合在移动端使用</i>
 	
-	<footer class="bottom row">
-		<span>&copy;-hiou</span>	
-	</footer>
 	
-	
-	
-	<script>
-	</script>
 </body>
 </html>
