@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>AJAX-跨域请求实验</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<style>
+		.position {
+			width: 60%;
+			margin: 30px auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="field has-addons position">
+		<input class="input" type="text" placeholder="require url">
+		<div class="control">
+		  <button class="button is-primary">Submit</button>
+		</div>
+	</div>
+	<div class="box position" id="res">
+		<h4>请求的内容：</h4>
+	</div>
+	<script>
+		let input = document.querySelector('input');
+		let sub = document.querySelector('button');
+
+		sub.addEventListener('click', handleButtonsPress, false);
+
+		function handleButtonsPress () {
+			let http_req = new XMLHttpRequest();
+			http_req.onreadystatechange = handle_res;
+			http_req.open('GET', 'http://localhost:4000/' + input.value);
+			http_req.send();
+		}
+
+		function handle_res(e) {
+			if (e.target.readyState === 4 && e.target.status === 200) {
+				document.getElementById('res').innerHTML = e.target.responseText;
+			}
+		}
+	</script>
+</body>
+</html>

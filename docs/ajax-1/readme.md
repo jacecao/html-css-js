@@ -1,4 +1,6 @@
-#### AJAX
+#### AJAX-1
+
+AJAX 基础用例展示
 
 * XMLHttpRequest readState属性
 
@@ -58,6 +60,8 @@
 |progress|触发以提示请求的进度|ProgrssEvent|
 |readystatechange|在请求生命周期发生变化时触发|Event|
 |timeout|请求超时触发|ProgrssEvent|
+
+**一个请求实例可以通过调用abort()方法来终止本次请求，并会触发abort事件**
 
 * ProgressEvent
 

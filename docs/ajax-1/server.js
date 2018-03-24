@@ -16,14 +16,14 @@ let webserver = function (req, res) {
   fs.exists(filePath, function (exists) {
     if (exists) {
       // 响应头设置内容类型
-      res.writeHead(200, {
-        "Content-Type": "text/html"
+      res.writeHead(200, 'ok', {
+        "Content-Type": "text/html",
       });
       // 创建读取文件流
       let fileStream = fs.createReadStream(filePath, {flags: 'r'});
       fileStream.on('error', function (err) {
-        res.writeHead(404);
-        res.end('<h3>404 Read Error</h3>');
+        res.writeHead(500);
+        res.end('<h3>500 Read Error</h3>');
       });
       fileStream.pipe(res);
     } else {
