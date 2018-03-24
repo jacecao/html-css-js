@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax实例</title>
+	<style>
+		table {
+			margin: 10px;
+			border-collapse: collapse;
+		}
+		div {margin:10px;}
+		td, th {
+			padding: 4px;
+		}
+	</style>
+</head>
+<body>
+	<h3>AJAX-TEST</h3>
+	<div>
+		<button>apples</button>
+		<button>cherries</button>
+	</div>
+	<hr>
+	<span>请求状态信息</span>
+	<table id="events" border="1"></table>
+	<hr>	
+	<span>获取服务端content-type</span>
+	<div id="ctheader"></div>
+	<span>获取服务端响应头信息</span>
+	<div id="allheaders"></div>
+	<hr>
+	<div id="target">press a button</div>
+	
+	
+	<script>
+		var buttons = document.getElementsByTagName('button');
+		Array.prototype.forEach.call(buttons, function (button) {
+			button.addEventListener('click', function (e) {
+				clearEventDetails();
+				var httpRequest = new XMLHttpRequest();
+				httpRequest.onreadystatechange = handleResponse;
+				httpRequest.onerror = handleError;
+				httpRequest.onload = handleLoad;
+				httpRequest.onloadend = handleLoadEnd;
+				httpRequest.onloadstart = handleLoadStart;
+				httpRequest.onprogress = handleProgress;
+				// console.log('./'+e.target.innerHTML+'.html');
+				httpRequest.open('GET', './'+e.target.innerHTML+'.html');
+				httpRequest.send();
+			}, false);
+		});
+		function handleResponse(e) {
+			// console.log(e.target);
+			displayEventDetails("readyState(" + e.target.readyState + ")");
+			if (e.target.readyState == 2) {
+				document.getElementById('allheaders').innerHTML = e.target.getAllResponseHeaders();
+				document.getElementById('ctheader').innerHTML = e.target.getResponseHeader("Content-Type");
+			}
+			if (e.target.readyState == XMLHttpRequest.DONE && e.target.status == 200) {
+				document.getElementById('target').innerHTML = e.target.responseText;
+			}
+		}
+
+		function handleError(e) {displayEventDetails('error', e);}
+		function handleLoad(e) {displayEventDetails('Load', e);}
+		function handleLoadEnd(e) {displayEventDetails('LoadEnd', e);}
+		function handleLoadStart(e) {displayEventDetails('LoadStart', e);}
+		function handleProgress(e) {displayEventDetails('Progress', e);}
+
+		function clearEventDetails () {
+			document.getElementById('events').innerHTML = "<tr>" +
+			"<th>Event</th>" +
+			"<th>LengthComputable</th>" +
+			"<th>loaded</th>" +
+			"<th>total</th>" +
+			"</tr>" 
+		}
+
+		function displayEventDetails (eventName, e) {
+			// console.log(e);
+			if (e) {
+				document.getElementById('events').innerHTML += 
+				"<tr><td>" + eventName + "</td><td>" + e.lengthComputable +
+				"</td><td>" + e.loaded + "</td><td>" + e.total + "</td></tr>"
+			} else {
+				document.getElementById('events').innerHTML += 
+				"<tr><td>" + eventName + "</td>" + 
+				"<td>NA</td>" + 
+				"<td>NA</td>" + 
+				"<td>NA</td></tr>"
+			}
+		}
+	</script>
+</body>
+</html>

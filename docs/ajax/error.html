@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax-错误处理</title>
+	<style>
+		div {margin:10px;}
+	</style>
+</head>
+<body>
+	<div>
+		<button>apples</button>
+		<button>cherries</button>
+		<button>chocolate</button>
+		<button id="badhost">Bad Host</button>
+		<button id="badurl">Bad URL</button>
+	</div>
+	
+	<p>获取到的数据</p>
+	<div id="target">press a button</div>
+	<p>出错信息</p>
+	<div id="errmsg"></div>
+	<p>状态信息</p>
+	<div id="statusmsg"></div>
+	
+	<script>
+		var buttons = document.getElementsByTagName('button');
+		Array.prototype.forEach.call(buttons, function (button) {
+			button.addEventListener('click', function (e) {
+				handleButtonPress(e);
+			}, false);
+		});
+
+		function handleButtonPress (e) {
+			clearMessages();
+			httpRequest = new XMLHttpRequest();
+			httpRequest.onreadystatechange = handleResponse;
+			httpRequest.onerror = handleError;
+			try {
+				switch (e.target.id) {
+					case 'badhost':
+						httpRequest.open('GET', 'http://a.nodomain/doc.html');
+						break;
+					case 'badurl':
+						httpRequest.open('GET', 'http://');
+						break;
+					default:
+						httpRequest.open("GET", './' + e.target.innerHTML + '.html');	
+						break;
+				}
+				httpRequest.send();
+			} catch (e) {
+				displayErrorMsg('try/catch', e.message);
+			}
+		}
+
+		function handleError(e) {
+			displayErrorMsg('error event', e.target.status + e.target.statusText);
+		}
+
+		function handleResponse(e) {
+			let req = e.target;
+			if (req.readyState === 4) {
+				var target = document.getElementById('target');
+				if (req.status === 200) {
+					target.innerHTML = req.responseText;
+				} else {
+					document.getElementById('statusmsg').innerHTML = 
+					'status: ' + req.status + " " + req.statusText;
+				}
+			}
+		}
+
+		function displayErrorMsg(src, msg) {
+			document.getElementById('errmsg').innerHTML = src + ":" + msg;
+		}
+
+		function clearMessages () {
+			document.getElementById('errmsg').innerHTML = '';
+			document.getElementById('statusmsg').innerHTML = '';
+		}
+	</script>
+</body>
+</html>
