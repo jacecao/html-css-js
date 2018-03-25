@@ -63,6 +63,9 @@ AJAX 基础用例展示
 
 **一个请求实例可以通过调用abort()方法来终止本次请求，并会触发abort事件**
 
+* XMLHttpRequest中的upload属性
+一个请求实例的upload属性将返回一个可用于监控数据上传进度的对象，该对象主要用于监听上传中触发的事件，onabort\onerror\onload\onloadend\onloadstart\onprogress\ontimeout。
+
 * ProgressEvent
 
 `ProgressEvent`该事件对象是与常规的事件对象增加了以下一些额外属性

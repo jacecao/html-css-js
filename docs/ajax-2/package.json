@@ -1,0 +1,15 @@
+{
+  "name": "ajax-2",
+  "version": "1.0.0",
+  "description": "ajax test",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "hiou",
+  "license": "ISC",
+  "dependencies": {
+    "multiparty": "^4.1.3"
+  }
+}

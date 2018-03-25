@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>AJAX-数据上传</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<style>
+		.position {
+			width: 40%;
+			margin: 30px auto;
+			min-width: 300px;
+		}
+	</style>
+</head>
+<body>
+	<form class="position" id="form" method="post" action="http://localhost:3000/form">
+		<div class="field">
+			<label for="">apple</label>
+			<div class="control">
+				<input class="input" type="text" placeholder="number" name="apple" value="6">	
+			</div>
+		</div>
+		<div class="field">
+			<label for="">cherries</label>
+			<div class="control">
+				<input class="input" type="text" placeholder="number" name="cherries" value="10">	
+			</div>
+		</div>
+		<div class="field">
+			<label for="">upload-file</label>
+			<div class="control">
+				<input class="input" type="file" placeholder="number" name="files">
+			</div>
+			<div class="control">
+				<progress class="help progress is-primary" value="0" max="100" id="prog">0%</progress>
+			</div>
+		</div>
+		<div class="field is-grouped is-grouped-right">
+		 	<button class="button is-primary" id="submit">Submit</button>
+		</div>
+	</form>
+	<div class="box position">
+		<h4>服务返回的数据：</h4>
+		<p id="res"></p>
+	</div>
+	<script>
+		let inputs = document.querySelectorAll('input');
+		let sub = document.querySelector('#submit');
+		let res = document.querySelector('#res');
+		let form = document.querySelector('#form');
+		let prog = document.querySelector('#prog');
+
+		sub.addEventListener('click', function (e) {
+			handleButtonsPress(e, 'form_data');
+		}, false);
+		// 1. 构建序列化表单
+		function parseForm (eles) {
+			let formData = '';
+			Array.prototype.forEach.call(eles, (ele) => {
+				formData += `${ele.name}=${ele.value}&`;
+			});
+			return formData;
+		}
+		// 2. 使用FormData对象发送表单数据
+		function form_data (eles) {
+			let formData = new FormData();
+			Array.prototype.forEach.call(eles, (ele) => {
+				formData.append(ele.name, ele.value);
+			});
+			return formData;
+		}
+		// 3. 使用json发送表单数据
+		function form_json (eles) {
+			let formData = new Object();
+			Array.prototype.forEach.call(eles, (ele) => {
+				formData[ele.name] = ele.value;
+			});
+			return formData;
+		}
+		function handleButtonsPress (e, type) {
+			e.preventDefault();
+			let http_req = new XMLHttpRequest();
+			// http_req.overrideMimeType('text/html');
+			// 上传进度的监听
+			// 获取XMLHttpRequestUpload对象
+			let upload = http_req.upload;
+			console.log(upload);
+			upload.onprogress = function (e) {
+				prog.max = e.total;
+				prog.value = e.loaded;
+			};
+			upload.onload = function (e) {
+				// console.log(e);
+				prog.max = 1;
+				prog.value = 1;
+			};
+			http_req.onreadystatechange = handle_res;
+			http_req.open('POST', 'http://localhost:3000/form');
+			switch (type) {
+				case 'form_data':
+					http_req.send(form_data(inputs));
+					// http_req.send(new FormData(form));
+					break;
+				case 'json':
+					http_req.setRequestHeader('content-type', 'application/json');
+					let json = JSON.stringify(form_json(inputs));
+					http_req.send(json);
+					break;
+				default:
+					http_req.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+					http_req.send(parseForm(inputs));
+					return;		
+			}
+			
+			
+		}
+		function handle_res(e) {
+			if (e.target.readyState === 4 && e.target.status === 200) {
+				// 覆盖服务器的响应文件类型
+				// 如果服务器返回的数据方式不是你想要的类型，此时执行数据类型就很有用了
+				// 但需要注意的是在LOADING和DONE阶段是无法执行改写,所以需要将该设置在创建请求实例后就得执行
+				// e.target.overrideMimeType('text/html');
+				res.innerHTML = e.target.responseText;
+				/*
+				** 接收XML文本
+				* httpRequest.overrideMimeType('application/xml');
+				* let xmlDOC = httpRequest.responseXML;
+				* xmlDOC.getElementsByTagName().....
+				 */
+			}
+		}
+	</script>
+</body>
+</html>
