@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>HTML-CSS-JS</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<style>
+		html {font-size: 62.5%;}
+		header {
+			height: 12rem;
+			background-color: #84fab0;
+			background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+		}
+		h1.title{
+			text-align: center;
+			padding: 3rem 0;
+			color: #fff;
+		}
+		header .sub {
+			text-align: center;
+			color: #fff;
+			margin-top: -3rem;
+			font-size: 1.8rem;
+		}
+    .item {
+      width: 80%;
+      margin: 20px auto;
+    }
+    .ctl {
+      position: relative;
+    }
+    .info {
+      vertical-align: top;
+      user-select: none;
+    }
+
+    .info-2 {
+      position: absolute;
+      top:  -2px;
+      margin-left: 4px;
+    }
+	</style>
+</head>
+<body>
+	<header>
+		<h1 class="title is-1">HTML + CSS + JS</h1>
+		<p class="sub">Canvas</p>
+	</header>
+
+  <section class="item">
+    <div>
+      <label class="checkbox">
+        <input type="checkbox" class="checkbox-hook">
+        fullscreen
+      </label>
+    </div>
+    <canvas id="test-1"></canvas>
+  </section>
+
+  <section class="item">
+    <div class="ctl">
+      <input type="range" class="range-hook" max="6" min="1" value="1" step="1">
+      <span class="info info-2">1</span>
+    </div>
+    <canvas id="test-2"></canvas>
+  </section>
+
+  <script src="./js/util.js"></script>
+  <script src="./js/image.js"></script>
+</body>
+</html>
