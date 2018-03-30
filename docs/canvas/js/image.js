@@ -4,27 +4,25 @@
   var context = canvasObj.context;
   var canvas = canvasObj.ele;
   var checkbox = getEle('.checkbox-hook');
-  var image = new Image();
-  image.src = "http://a.hiphotos.baidu.com/image/pic/item/faf2b2119313b07eaad49f0c00d7912397dd8c4d.jpg";
+
+  var img = image();
 
   var fullScreen = function () {
     context.clearRect(0, 0, canvas.width, canvas.height);
     if (checkbox.checked) {
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
     } else {
-      context.drawImage(image, 0, 0);
+      context.drawImage(img, 0, 0);
     }
   }
-
-  image.onload = function (e) {
-    // console.log(e);
-    context.drawImage(image, 0, 0);
+  img.onload = function (e) {
+    context.drawImage(this, 0, 0);
     checkbox.addEventListener('click' , fullScreen, false);
   };
 })();
 
 
-// 图片放大
+// 图片缩放
 (function () {
   var canvasObj = get2DCanvas('#test-2');
   var context = canvasObj.context;
@@ -37,10 +35,9 @@
   context.shadowBlur = 10;
 
   var range = getEle('.range-hook');
-  var image = new Image();
-  image.src = "http://a.hiphotos.baidu.com/image/pic/item/faf2b2119313b07eaad49f0c00d7912397dd8c4d.jpg";
-
   var info = getEle('.info-2');
+
+  var img = image();
 
   var scaleImage = function (scale) {
     var w = canvas.width,
@@ -48,7 +45,7 @@
         sw = w * scale,
         sh = h * scale;
     context.clearRect(0, 0, w, h);
-    context.drawImage(image, -sw/2 + w/2 , -sh/2 + h/2, sw, sh);
+    context.drawImage(img, -sw/2 + w/2 , -sh/2 + h/2, sw, sh);
   }
 
   var drawScaleText = function (value) {
@@ -58,11 +55,81 @@
     info.style.top = -(value * 4) / 2 + 'px';
   }
 
-  image.onload = function (e) {
-    context.drawImage(image, 0, 0, canvas.width, canvas.height);
-    range.addEventListener('change' , function () {
-      scaleImage(this.value);
-      drawScaleText(this.value);
-    }, false);
+  img.onload = function (e) {
+    context.drawImage(this, 0, 0, canvas.width, canvas.height);
   };
+
+  range.addEventListener('change' , function () {
+    scaleImage(this.value);
+    drawScaleText(this.value);
+  }, false);
 })();
+
+// 水印绘制
+/*
+(function () {
+  var canvasObj = get2DCanvas('#test-3');
+  var context = canvasObj.context;
+  var canvas = canvasObj.ele;
+
+  var range = getEle('.range3-hook');
+  var img = image();
+
+  var scaleImage = function (scale) {
+    var w = canvas.width,
+        h = canvas.height,
+        sw = w * scale,
+        sh = h * scale;
+    context.clearRect(0, 0, w, h);
+    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    drawWaterMark(context, canvas);
+    // 注意这里绘制原型是canvas，而不是图像
+    context.drawImage(canvas, 0, 0, canvas.width, canvas.height, -sw/2 + w/2 , -sh/2 + h/2, sw, sh);
+  }
+
+  img.onload = function (e) {
+    context.drawImage(this, 0, 0, canvas.width, canvas.height);
+    drawWaterMark(context, canvas);
+  };
+
+  range.addEventListener('change' , function () {
+    scaleImage(this.value);
+  }, false);
+})();
+*/
+
+
+// 采用后台canvas实现缩放图片渲染
+// 看看与上面有什么不同
+
+(function () {
+  var canvasObj = get2DCanvas('#test-3');
+  var context = canvasObj.context;
+  var canvas = canvasObj.ele;
+
+  var off_canvas = createCanvas(canvas.width, canvas.height);
+
+  var range = getEle('.range3-hook');
+  var img = image();
+
+  var scaleImage = function (scale) {
+    var w = canvas.width,
+        h = canvas.height,
+        sw = w * scale,
+        sh = h * scale;
+    context.clearRect(0, 0, w, h);
+    // 注意这里绘制原型是canvas，而不是图像
+    context.drawImage(off_canvas.ele, 0, 0, canvas.width, canvas.height, -sw/2 + w/2 , -sh/2 + h/2, sw, sh);
+  }
+
+  img.onload = function (e) {
+    off_canvas.context.drawImage(this, 0, 0, canvas.width, canvas.height);
+    drawWaterMark(off_canvas.context, off_canvas.ele);
+    context.drawImage(off_canvas.ele, 0, 0, canvas.width, canvas.height);
+  };
+
+  range.addEventListener('change' , function () {
+    scaleImage(this.value);
+  }, false);
+})();
+
