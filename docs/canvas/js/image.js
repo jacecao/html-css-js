@@ -1,3 +1,8 @@
+/*
+** canvas 对图像的基本操作
+** @author  hiou
+ */
+
 // 图片铺满canvas
 (function () {
   var canvasObj = get2DCanvas('#test-1');
