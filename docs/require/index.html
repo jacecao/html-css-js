@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Require-module</title>
+</head>
+<body>
+  <script src="require.js"></script>
+  <script>
+    require(['test/util'], function (util) {
+      util.show('hello world!');
+    })
+  </script>
+</body>
+</html>

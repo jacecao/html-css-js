@@ -27,7 +27,7 @@ var getEles = function (selector) {
 
 var image = function (src) {
   var _image = new Image();
-  _image.src = src || "http://a.hiphotos.baidu.com/image/pic/item/faf2b2119313b07eaad49f0c00d7912397dd8c4d.jpg";
+  _image.src = src || "http://img.zcool.cn/community/0104005ad31556a8012040292e2eaf.jpg@1280w_1l_2o_100sh.jpg";
   return _image;
 }
 
