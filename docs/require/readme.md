@@ -2,7 +2,7 @@
 
 说一下原生JS如何实现require的核心思想
 
-* #### <span id="require">require()方法</span>
+* <h4 id="require">require()方法</h4>
 
 require(module_deps, callback(modules_res) {});
 
@@ -38,9 +38,11 @@ require()方法执行流程
 这个闭包也是整个`require`模块最主要消耗内存的地方，依次循环加载模块依赖中，我们都需要执行`loadModule`函数，而在该函数中我们又传入了一个新的匿名函数，这个函数中需要使用使用多个`require`函数体内的变量，所以在该函数未执行前这些变量都必须保存在内存中。
 那为什么要说这个闭包函数很重要呢？主要是这里面包含了整个模块加载**执行逻辑**。
 
-* #### <span id="loadModule">loadModule()方法</span>
+* <h4 id="loadModule">loadModule()方法</h4>
 
 我们直接看代码执行流程：
+
+![loadModule](img/require-001.png)
 
 ```javascript
 /*
@@ -107,14 +109,17 @@ let loadModule = function (mod_dep_name, callback) {
 
 示例图：
 
-![示例图]('img/require.png')
+![示例图](img/require.png)
 
 关于向页面中动态添加`script`标签对代码执行顺序的影响，可以参看本案例中`test.html`文件，这个例子就能反应代码究竟是如何执行的。
 
-* #### <span id="initModule">initModule()方法</span>
+* <h4 id="initModule">initModule()方法</h4>
 
 initModule方法中有三个参数`modName`,`modules_res`,`callback`;
 > @modName: 当前执行的模块名称，这里不要和依赖模块名字搞混了 </br>
 > @modules_res: 当前执行模块中所有依赖模块返回的数据 </br>
 > @callback: 当前执行模块的主回调函数
 
+模块初始化流程：
+
+![initModule](img/require-002.png)

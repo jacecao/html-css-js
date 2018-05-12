@@ -23,8 +23,8 @@
     let url = _getPathUrl(mod_dep_name);
     let js_ele, mod_obj, _script;
 
-    console.log(JSON.stringify(moduleCache));
-    console.log(mod_dep_name);
+    // console.log(JSON.stringify(moduleCache));
+    // console.log(mod_dep_name);
 
     // 检查模块是否已经加载
     if (moduleCache[mod_dep_name]) {
