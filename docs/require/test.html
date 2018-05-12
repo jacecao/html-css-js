@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let _script = document.createElement('script');
+    _script.id = 'test';
+    _script.type = 'text/javascript';
+    _script.charset = 'utf-8';
+    // 约定当前载入的代码为异步执行
+    _script.async = true;
+    _script.src = 'test/test.js';
+    // 注意这里添加元素的顺序，所有模块都必须在主模块执行前就得加入
+    let js_ele = document.getElementsByTagName('script')[0];
+    js_ele.parentNode.insertBefore(_script, js_ele);
+    console.log('add');
+
+    _script.src = 'require.js';
+    js_ele = document.getElementsByTagName('script')[0];
+    js_ele.parentNode.insertBefore(_script, js_ele);
+    console.log('add-require');
+  </script>
+</body>
+</html>

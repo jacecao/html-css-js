@@ -1,3 +1,7 @@
+/*
+** 注意这里采用的是同步加载策略
+ */
+
 (function () {
   // 缓存已经加载的模块
   let moduleCache = {};
@@ -12,47 +16,56 @@
   }
 
   // 模块加载
-  let loadModule = function (modName, callback) {
-    let url = _getPathUrl(modName);
-    let fs, mod, _script;
-    // 检查模块是否已经加载
-    if (moduleCache[modName]) {
+  let loadModule = function (mod_dep_name, callback) {
 
-      mod = moduleCache[modName];
+    let url = _getPathUrl(mod_dep_name);
+    let js_ele, mod_obj, _script;
+
+    console.log(JSON.stringify(moduleCache));
+    console.log(mod_dep_name);
+
+    // 检查模块是否已经加载
+    if (moduleCache[mod_dep_name]) {
+      mod_obj = moduleCache[mod_dep_name];
       // 检查模块状态
-      if (mod.status == 'loaded') {
+      if (mod_obj.status == 'loaded') {
+        // console.log('loaded');
         // 如果已经加载完毕，那么下次轮询时执行回调
-        setTimeout(callback(mod.exports), 0);
+        setTimeout(callback(mod_obj.exports), 0);
       } else {
         // 如果未加载完毕就推入事件组（其实这里一个事件栈）
-        mod.onload.push(callback);
+        mod_obj.onload.push(callback);
       }
 
     } else {
       // 缓存模块
-      moduleCache[modName] = {
-        modName: modName,
+      moduleCache[mod_dep_name] = {
+        modName: mod_dep_name,
         status: 'loading',
         exports: null,
         onload: [callback]
       };
       // 创建script元素到文档中
       _script = document.createElement('script');
-      _script.id = modName;
+      _script.id = mod_dep_name;
       _script.type = 'text/javascript';
       _script.charset = 'utf-8';
       // 约定当前载入的代码为异步执行
       _script.async = true;
       _script.src = url;
       // 注意这里添加元素的顺序，所有模块都必须在主模块执行前就得加入
-      fs = document.getElementsByTagName('script')[0];
-      fs.parentNode.insertBefore(_script, fs);
+      js_ele = document.getElementsByTagName('script')[0];
+      js_ele.parentNode.insertBefore(_script, js_ele);
+
+      console.log(Date.now());
     }
   }
 
-  // 模块信息缓存
+  // 初始化模块
   let initModule = function (modName, modules_res, callback) {
     let mod, fn;
+    // console.log(JSON.stringify(moduleCache));
+    // console.log(modName);
     // 如果模块已经加载且有了缓存
     // 也就是执行了上面的loadmodule
     if (moduleCache.hasOwnProperty(modName)) {
@@ -60,7 +73,7 @@
       mod = moduleCache[modName];
       mod.status = 'loaded';
       // 执行模块中的函数，并将模块中函数的返回值赋值给exports
-      mod.exports = callback ? callback(modules_res) : null;
+      mod.exports = callback ? callback(...modules_res) : null;
       // 再次执行模块加载中推入加载栈中的函数
       // 这里使用方法非常巧妙，本人非常欣赏这样的优雅写法
       // fn 每次取得栈中第一个函数，并执行，直到栈中函数取尽
@@ -68,6 +81,7 @@
         fn(mod.exports);
       }
     } else {
+      // console.log('main');
       // 如果没有执行模块加载，那么直接在window全局中执行回调
       callback && callback.apply(window, modules_res);
     }
@@ -85,6 +99,7 @@
     // 获取HTML文件中当前正在执行的代码片段的script元素
     // 这里主要是用于获取文件地址
     modName = document.currentScript && document.currentScript.id || 'REQUIRE_MAIN';
+    // console.log(modName);
     // 注意这里的src得到的是一个绝对路径
     // console.log(document.currentScript.src);
     if (modul_deps.length) {
@@ -96,7 +111,9 @@
           depCount++;
           // 执行模块加载
           loadModule(modul_deps[i], function (mod_res) {
+            // 记录每个依赖模块返回的数据
             modules_res[i] = mod_res;
+            // 执行完依赖模块加载后，将需要的依赖模块数量减一
             depCount--;
             if (depCount == 0) {
               // 初始依赖模块
@@ -104,6 +121,7 @@
             }
           });
         })(i)
+        console.log(`${modName} ---- ${i} \n >>>>>>`);
       }
     } else {
 

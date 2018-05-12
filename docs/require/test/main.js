@@ -1,3 +1,3 @@
-require(['test/util'], function (util) {
-  util.show('hello world!');
+require(['test/tie', 'test/util'], function (str, util) {
+  util.show(str);
 })
