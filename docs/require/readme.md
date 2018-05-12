@@ -43,14 +43,18 @@ require()方法执行流程
 我们直接看代码执行流程：
 
 ```javascript
-// @mod_dep_name  需要加载模块的名字
-// @callback 加载模块后的回调函数，这里的回调函数已经在`require`方法中被我们写死，就是记录模块返回的数据，和检查所有依赖模块是否已经全部加载完毕，如果加载完毕就执行模块初始化
+/*
+** @mod_dep_name  需要加载模块的名字
+** @callback 加载模块后的回调函数，这里的回调函数已经在`require`方法中被我们写死，就是记录模块返回的数据，和检查所有依赖模块是否已经全部加载完毕，如果加载完毕就执行模块初始化
+*/
 let loadModule = function (mod_dep_name, callback) {
   // _getPathUrl检查模块地址是否符合要求（检查是否为一个js文件）
   let url = _getPathUrl(mod_dep_name);
-  // @js_ele 记录页面第一个引入的代码标签
-  // @_script 需要置入页面的代码标签
-  // mod_obj 储存缓存中的模块信息
+  /*
+  ** @js_ele 记录页面第一个引入的代码标签
+  ** @_script 需要置入页面的代码标签
+  ** mod_obj 储存缓存中的模块信息
+  */
   let js_ele, mod_obj, _script;
   // 检查模块是否已经加载
   if (moduleCache[modName]) {
@@ -58,12 +62,16 @@ let loadModule = function (mod_dep_name, callback) {
     mod_obj = moduleCache[mod_dep_name];
     // 检查模块状态
     if (mod_obj.status == 'loaded') {
-      // 如果已经加载完毕，那么下次轮询时执行回调
-      // 这里在该案例中是不会被执行的,因为整个加载策略为同步加载策略
+      /*
+      ** 如果已经加载完毕，那么下次轮询时执行回调
+      ** 这里在该案例中是不会被执行的,因为整个加载策略为同步加载策略
+      */
       setTimeout(callback(mod_obj.exports), 0);
     } else {
-      // 如果未加载完毕就推入事件组（其实这里一个事件栈
-      // 也就是所有的模块都将回调函数挂起，等待模块被加载后执行
+      /*
+      ** 如果未加载完毕就推入事件组（其实这里一个事件栈
+      ** 也就是所有的模块都将回调函数挂起，等待模块被加载后执行
+      */
       mod_obj.onload.push(callback);
     }
 
@@ -98,9 +106,15 @@ let loadModule = function (mod_dep_name, callback) {
 理解这点非常关键，否则就无法理解为什么上面检查模块状态是无效的（代码的挂起状态就像是假的异步执行，本质依然是同步执行）。
 
 示例图：
-![示例图]('./img/require.png')
+
+![示例图]('img/require.png')
 
 关于向页面中动态添加`script`标签对代码执行顺序的影响，可以参看本案例中`test.html`文件，这个例子就能反应代码究竟是如何执行的。
 
+* #### <span id="initModule">initModule()方法</span>
 
+initModule方法中有三个参数`modName`,`modules_res`,`callback`;
+> @modName: 当前执行的模块名称，这里不要和依赖模块名字搞混了 </br>
+> @modules_res: 当前执行模块中所有依赖模块返回的数据 </br>
+> @callback: 当前执行模块的主回调函数
 

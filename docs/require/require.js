@@ -1,4 +1,6 @@
 /*
+** Require 模块加载实现
+*
 ** 注意这里采用的是同步加载策略
  */
 
@@ -56,8 +58,7 @@
       // 注意这里添加元素的顺序，所有模块都必须在主模块执行前就得加入
       js_ele = document.getElementsByTagName('script')[0];
       js_ele.parentNode.insertBefore(_script, js_ele);
-
-      console.log(Date.now());
+      // console.log(Date.now());
     }
   }
 
@@ -66,22 +67,25 @@
     let mod, fn;
     // console.log(JSON.stringify(moduleCache));
     // console.log(modName);
-    // 如果模块已经加载且有了缓存
-    // 也就是执行了上面的loadmodule
+    /*
+    ** 如果模块已经加载且有了缓存
+    ** 也就是执行了上面的loadmodule
+    */
     if (moduleCache.hasOwnProperty(modName)) {
       // 改变状态执行模块中的函数
       mod = moduleCache[modName];
       mod.status = 'loaded';
       // 执行模块中的函数，并将模块中函数的返回值赋值给exports
       mod.exports = callback ? callback(...modules_res) : null;
-      // 再次执行模块加载中推入加载栈中的函数
-      // 这里使用方法非常巧妙，本人非常欣赏这样的优雅写法
-      // fn 每次取得栈中第一个函数，并执行，直到栈中函数取尽
+      /*
+      ** 再次执行模块加载中推入加载栈中的函数
+      ** 这里使用方法非常巧妙，本人非常欣赏这样的优雅写法
+      ** fn 每次取得栈中第一个函数，并执行，直到栈中函数取尽
+      */
       while (fn = mod.onload.shift()) {
         fn(mod.exports);
       }
     } else {
-      // console.log('main');
       // 如果没有执行模块加载，那么直接在window全局中执行回调
       callback && callback.apply(window, modules_res);
     }
@@ -96,10 +100,11 @@
     let i, len, modName;
     let isEmpty = false;
 
-    // 获取HTML文件中当前正在执行的代码片段的script元素
-    // 这里主要是用于获取文件地址
+    /*
+    ** 获取HTML文件中当前正在执行的代码片段的script元素
+    ** 这里主要是用于获取文件地址
+    */
     modName = document.currentScript && document.currentScript.id || 'REQUIRE_MAIN';
-    // console.log(modName);
     // 注意这里的src得到的是一个绝对路径
     // console.log(document.currentScript.src);
     if (modul_deps.length) {
