@@ -7,9 +7,7 @@
 require(module_deps, callback(modules_res) {});
 
 > @module_deps: Array 记录需要依赖的模块地址
->
 > @callback: 加载模块后执行的回调函数，该回调函数接收一组参数module_res
->
 > @module_res: 为加载模块module_deps中依次每个模块返回的值
 
 require()方法执行流程
